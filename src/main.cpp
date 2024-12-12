@@ -1,18 +1,26 @@
 #include <Arduino.h>
+#include <WiFiMulti.h>
 
-// put function declarations here:
-int myFunction(int, int);
+// ---------- Replace with your WiFi credentials ----------
+#define WIFI_SSID "wifi_network_name"
+#define WIFI_PASSWORD "wifi_password"
+// ---------- Replace with your WiFi credentials ----------
+
+WiFiMulti wifiMulti;
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(921600);
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  wifiMulti.addAP(WIFI_SSID, WIFI_PASSWORD);
+
+  while (wifiMulti.run() != WL_CONNECTED) {
+    delay(100);
+  }
+
+  Serial.println("Connected");
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  digitalWrite(LED_BUILTIN, WiFi.status() == WL_CONNECTED);
 }
